@@ -34,7 +34,7 @@ class ProfileEditView(LoginRequiredMixin, UpdateView):
 
     def get_success_url(self):
         return reverse('blog:profile',
-                            kwargs={'username': self.object.username})
+                       kwargs={'username': self.object.username})
 
 
 class ArticleMixin:
@@ -61,7 +61,7 @@ class FeedbackMixin:
 
     def get_success_url(self):
         return reverse('blog:post_detail',
-                            kwargs={'post_id': self.get_post().id})
+                      kwargs={'post_id': self.get_post().id})
 
 
 class ModifyFeedbackMixin(FeedbackMixin):
@@ -124,7 +124,7 @@ class UserProfileView(DetailView):
 
     def get_object(self, queryset=None):
         return get_object_or_404(get_user_model(),
-                                 username=self.kwargs['username'])
+                                username=self.kwargs['username'])
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -178,7 +178,7 @@ class PostUpdateView(LoginRequiredMixin, UpdateView):
 
     def get_success_url(self):
         return reverse('blog:profile',
-                            kwargs={'username': self.request.user.username})
+                      kwargs={'username': self.request.user.username})
 
 
 class PostDeleteView(LoginRequiredMixin, DeleteView):
@@ -212,11 +212,9 @@ class PostDetailView(DetailView):
         now = timezone.now()
 
         if self.request.user != post.author:
-            if (
-                post.pub_date > now
-                or not post.is_published
-                or not post.category.is_published
-            ):
+            if (post.pub_date > now
+                    or not post.is_published
+                    or not post.category.is_published):
                 raise Http404("Публикация не найдена или недоступна.")
         return post
 
